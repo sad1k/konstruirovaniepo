@@ -1,4 +1,4 @@
-import { Controller, Post, Delete, Body, Headers, UseGuards } from '@nestjs/common';
+import { Controller, Post, Delete, Body, Headers, UseGuards, UnauthorizedException } from '@nestjs/common';
 import { CartService } from '../services/cart.service';
 import { CartTokenValidator } from '../services/cart-token-validator.service';
 import { AddItemDto } from '../dto/add-item.dto';
@@ -13,24 +13,35 @@ export class CartController {
 
   @Post('add')
   async addItem(
-    @Headers('authorization') token: string,
+    @Headers('authorization') authHeader: string,
     @Body() addItemDto: AddItemDto,
   ) {
+    const token = authHeader?.split(' ')[1];
+    if (!token) {
+      throw new UnauthorizedException('No token provided');
+    }
+
     const isValid = await this.tokenValidator.validate(token);
     if (!isValid) {
-      throw new Error('Invalid token');
+      throw new UnauthorizedException('Invalid token');
     }
     return this.cartService.addItem(addItemDto);
   }
 
+  @Post('remove')
   @Delete('remove')
   async removeItem(
-    @Headers('authorization') token: string,
+    @Headers('authorization') authHeader: string,
     @Body() removeItemDto: RemoveItemDto,
   ) {
+    const token = authHeader?.split(' ')[1];
+    if (!token) {
+      throw new UnauthorizedException('No token provided');
+    }
+
     const isValid = await this.tokenValidator.validate(token);
     if (!isValid) {
-      throw new Error('Invalid token');
+      throw new UnauthorizedException('Invalid token');
     }
     return this.cartService.removeItem(removeItemDto);
   }

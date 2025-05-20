@@ -9,9 +9,13 @@ export class CartTokenValidator {
   async validate(token: string): Promise<boolean> {
     try {
       const response = await firstValueFrom(
-        this.httpService.post('http://auth-service/validate-token', { token })
+        this.httpService.post('http://localhost:3000/auth/validate-token', {}, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
       );
-      return response.data;
+      return response.data.valid;
     } catch (error) {
       return false;
     }
