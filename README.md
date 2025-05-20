@@ -34,11 +34,12 @@ git clone <repository-url>
 ```
 
 2. Install dependencies for all services:
+  
   2.1 
   ```bash
   npm run install
   ```
-  
+
   2.2
   ```bash
   npm run install:all
