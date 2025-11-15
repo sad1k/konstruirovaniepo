@@ -12,5 +12,5 @@ export default new DataSource({
   database: process.env.DB_DATABASE || 'ecommerce',
   entities: ['src/**/*.entity{.ts,.js}'],
   migrations: ['src/migrations/*{.ts,.js}'],
-  synchronize: false,
+  synchronize: true,
 }); 
